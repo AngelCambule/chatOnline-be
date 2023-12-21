@@ -32,19 +32,21 @@ mongoose.connect(`mongodb+srv://jkzcs:${password}@cluster0.xnombsi.mongodb.net/$
 
 const chatManager = new chatDao()
 
-socketServer.on("connection", (socketClient) => {
+socketServer.on("connection", async (socketClient) => {
 
-  socketClient.on("homemessage", (data) => {
+  socketClient.on("homemessage", async (data) => {
     console.log(data)
-  });
-  socketClient.on('livechatServer', (msg) => {
-    console.log(msg.user,'Escribio : ',msg.message);
-    chatManager.createMessage(msg)
-    const response = chatManager.getAllMessages()
+    const response = await chatManager.getAllMessages()
     console.log(response);
-    socketServer.emit('livechat', chatManager.getAllMessages())
+  });
+  socketClient.on('livechatServer', async (msg) => {
+    console.log(msg.user,'Escribio : ',msg.message);
+    await chatManager.createMessage(msg)
+    const response = await chatManager.getAllMessages()
+    console.log(response);
+    socketServer.emit('livechat', response)
 
   })
-  socketServer.emit('livechat', chatManager.getAllMessages())
+  socketServer.emit('livechat', await chatManager.getAllMessages())
   });
   

@@ -7,13 +7,18 @@ bnv.innerHTML = `Bienvenido ${user}`
 
 const chatbox = document.querySelector('.chatbox')
 
-socketClient.on('livechat', (data) =>{
-  let messages = ""
-  console.log(data);
-  data.forEach((msg) => {
-    messages += `${msg.user} = ${msg.message}<br/>`
-  });
-  chatbox.innerHTML = messages
+socketClient.on('livechat', async (data) =>{
+    try {
+        let messages = ""
+        console.log(data);
+        await data.map((msg) => {
+        messages += `${msg.user} = ${msg.message}<br/>`
+        });
+        chatbox.innerHTML = messages
+    }catch (err){
+        console.log(err);
+    }
+  
 })
 
 const placeHolder = document.querySelector('#chatinput')

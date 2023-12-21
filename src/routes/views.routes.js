@@ -1,4 +1,7 @@
 import { Router } from "express";
+import chatDao from "../daos/dbManager/chat.dao.js";
+
+const chatManager = new chatDao()
 
 const router = Router();
 
@@ -9,9 +12,11 @@ router.get('/', (req, res) => {
 });
 
 router.get('/chat', (req,res) => {
+  
   res.render("chat", {
-    title: "Chat"
+    title: 'chat'
   })
+  
 })
 
-export default router;
+export default router
